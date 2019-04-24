@@ -37,45 +37,14 @@ class App extends Component {
   }
 
   renderMainRoutes() {
-    const { notes, folders } = this.state
     return (
       <>
         {['/', '/folder/:folderId'].map(path =>
-          <Route
-            exact
-            key={path}
-            path={path}
-            component={NoteListMain}
-          />
+          <Route exact key={path} path={path} component={NoteListMain}/>
         )}
-        <Route
-          path='/note/:noteId'
-          render={routeProps => {
-            const { noteId } = routeProps.match.params
-            const note = findNote(notes, noteId)
-            return (
-              <NotePageMain
-                {...routeProps}
-                note={note}
-              />
-            )
-          }}
-        />
-        <Route
-          path='/add-folder'
-          component={AddFolder}
-        />
-        <Route
-          path='/add-note'
-          render={routeProps => {
-            return (
-              <AddNote
-                {...routeProps}
-                folders={folders}
-              />
-            )
-          }}
-        />
+        <Route path='/note/:noteId' component={NotePageMain} />
+        <Route path='/add-folder' component={AddFolder} />
+        <Route path='/add-note' component={AddNote} />
       </>
     )
   }
