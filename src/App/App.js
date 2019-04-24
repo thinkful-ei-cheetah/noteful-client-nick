@@ -1,15 +1,16 @@
-import React, { Component } from 'react'
-import { Route, Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import NoteListNav from '../NoteListNav/NoteListNav'
-import NotePageNav from '../NotePageNav/NotePageNav'
-import NoteListMain from '../NoteListMain/NoteListMain'
-import NotePageMain from '../NotePageMain/NotePageMain'
-import AddFolder from '../AddFolder/AddFolder'
-import AddNote from '../AddNote/AddNote'
-import dummyStore from '../dummy-store'
-import { getNotesForFolder, findNote, findFolder } from '../notes-helpers'
+import React, { Component } from 'react';
+import { Route, Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import NoteListNav from '../NoteListNav/NoteListNav';
+import NotePageNav from '../NotePageNav/NotePageNav';
+import NoteListMain from '../NoteListMain/NoteListMain';
+import NotePageMain from '../NotePageMain/NotePageMain';
+import AddFolder from '../AddFolder/AddFolder';
+import AddNote from '../AddNote/AddNote';
+import dummyStore from '../dummy-store';
+import { getNotesForFolder, findNote, findFolder } from '../notes-helpers';
 import FoldersContext from '../FoldersContext';
+import NotesContext from '../NotesContext';
 import './App.css'
 
 class App extends Component {
@@ -138,7 +139,11 @@ class App extends Component {
           </h1>
         </header>
         <main className='App__main'>
-          {this.renderMainRoutes()}
+          <NotesContext.Provider value={{
+            notes: this.state.notes
+          }}>
+            {this.renderMainRoutes()}
+          </NotesContext.Provider>
         </main>
       </div>
     )
