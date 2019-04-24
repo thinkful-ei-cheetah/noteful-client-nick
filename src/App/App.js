@@ -7,7 +7,7 @@ import NoteListMain from '../NoteListMain/NoteListMain';
 import NotePageMain from '../NotePageMain/NotePageMain';
 import AddFolder from '../AddFolder/AddFolder';
 import AddNote from '../AddNote/AddNote';
-import { getNotesForFolder, findNote } from '../notes-helpers';
+//import { getNotesForFolder, findNote } from '../notes-helpers';
 import AppContext from '../AppContext';
 import './App.css'
 
@@ -53,6 +53,24 @@ class App extends Component {
     //   .catch(err => this.setState({error: err.message}))
   }
 
+  onDeleteNote = (noteId) => {
+    const BASEURL = "http://localhost:9090";
+    return fetch(BASEURL+`/notes/${noteId}`, {method: "DELETE"})
+    .then(res => {
+      if(!res.ok) throw new Error("Your delete request went horribly wrong :(")
+      return res.json()
+    })
+    .then(() => {
+      this.setState({
+        notes: this.state.notes.filter(note => note.id !== noteId)
+      })
+    })
+  }
+
+  // onDeleteNotesFromState = (noteId) => {
+  //   th
+  // }
+
   renderNavRoutes() {
     return (
       <>
@@ -83,7 +101,8 @@ class App extends Component {
     return (
       <AppContext.Provider value={{
         folders: this.state.folders,
-        notes: this.state.notes
+        notes: this.state.notes,
+        onDeleteNote: this.onDeleteNote
       }}>
         <div className='App'>
           <nav className='App__nav'>
