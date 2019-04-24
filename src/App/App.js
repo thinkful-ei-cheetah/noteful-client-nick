@@ -24,39 +24,14 @@ class App extends Component {
   }
 
   renderNavRoutes() {
-    const { notes, folders } = this.state
     return (
       <>
         {['/', '/folder/:folderId'].map(path =>
-          <Route
-            exact
-            key={path}
-            path={path}
-            render={routeProps =>
-              <NoteListNav
-                {...routeProps}
-              />
-            }
-          />
+          <Route exact key={path} path={path} component={NoteListNav}/>
         )}
-        <Route
-          path='/note/:noteId'
-          render={routeProps => {
-            return (
-              <NotePageNav
-                {...routeProps}
-              />
-            )
-          }}
-        />
-        <Route
-          path='/add-folder'
-          component={NotePageNav}
-        />
-        <Route
-          path='/add-note'
-          component={NotePageNav}
-        />
+        <Route path='/note/:noteId' component={NotePageNav}/>
+        <Route path='/add-folder' component={NotePageNav}/>
+        <Route path='/add-note' component={NotePageNav}/>
       </>
     )
   }
@@ -70,16 +45,7 @@ class App extends Component {
             exact
             key={path}
             path={path}
-            render={routeProps => {
-              const { folderId } = routeProps.match.params
-              const notesForFolder = getNotesForFolder(notes, folderId)
-              return (
-                <NoteListMain
-                  {...routeProps}
-                  notes={notesForFolder}
-                />
-              )
-            }}
+            component={NoteListMain}
           />
         )}
         <Route
