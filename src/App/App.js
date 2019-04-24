@@ -7,21 +7,45 @@ import NoteListMain from '../NoteListMain/NoteListMain';
 import NotePageMain from '../NotePageMain/NotePageMain';
 import AddFolder from '../AddFolder/AddFolder';
 import AddNote from '../AddNote/AddNote';
-import dummyStore from '../dummy-store';
 import { getNotesForFolder, findNote } from '../notes-helpers';
 import AppContext from '../AppContext';
 import './App.css'
+import { promised } from 'q';
 
 class App extends Component {
   state = {
     notes: [],
     folders: [],
+    error: null,
   };
 
   componentDidMount() {
+    const BASEURL = "http://localhost:9090";
     // fake date loading from API call
-    setTimeout(() => this.setState(dummyStore), 600)
-  }
+    const getFolders = fetch(BASEURL+'/folders')
+    const getNotes = fetch(BASEURL+'/notes')
+
+    Promise.all([getFolders, getNotes])
+    .then(resArr =>{
+      resArr.forEach((res, index) => {
+        if (!res.ok) throw new Error("Something went horribly wrong :(");
+        return [res.json(), index]
+        .then(jsonData => {
+          if(jsonData[1]===0) {
+            this.setState({
+              folders: jsonData[0],
+              error: null
+            })
+          } else {
+            this.setState({
+              notes: jsonData[0],
+              error: null
+            })
+          }
+        })
+      })})
+    .catch(err => this.setState({error: err.message}))    
+}
 
   renderNavRoutes() {
     return (
