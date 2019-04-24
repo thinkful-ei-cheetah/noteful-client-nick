@@ -9,6 +9,7 @@ import AddFolder from '../AddFolder/AddFolder'
 import AddNote from '../AddNote/AddNote'
 import dummyStore from '../dummy-store'
 import { getNotesForFolder, findNote, findFolder } from '../notes-helpers'
+import FoldersContext from '../FoldersContext';
 import './App.css'
 
 class App extends Component {
@@ -33,7 +34,6 @@ class App extends Component {
             path={path}
             render={routeProps =>
               <NoteListNav
-                folders={folders}
                 notes={notes}
                 {...routeProps}
               />
@@ -123,7 +123,12 @@ class App extends Component {
     return (
       <div className='App'>
         <nav className='App__nav'>
+        <FoldersContext.Provider value={{
+          folders: this.state.folders
+        }}>
           {this.renderNavRoutes()}
+        </FoldersContext.Provider>
+          
         </nav>
         <header className='App__header'>
           <h1>
