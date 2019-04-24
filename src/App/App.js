@@ -8,9 +8,8 @@ import NotePageMain from '../NotePageMain/NotePageMain';
 import AddFolder from '../AddFolder/AddFolder';
 import AddNote from '../AddNote/AddNote';
 import dummyStore from '../dummy-store';
-import { getNotesForFolder, findNote, findFolder } from '../notes-helpers';
-import FoldersContext from '../FoldersContext';
-import NotesContext from '../NotesContext';
+import { getNotesForFolder, findNote } from '../notes-helpers';
+import AppContext from '../AppContext';
 import './App.css'
 
 class App extends Component {
@@ -35,7 +34,6 @@ class App extends Component {
             path={path}
             render={routeProps =>
               <NoteListNav
-                notes={notes}
                 {...routeProps}
               />
             }
@@ -44,13 +42,9 @@ class App extends Component {
         <Route
           path='/note/:noteId'
           render={routeProps => {
-            const { noteId } = routeProps.match.params
-            const note = findNote(notes, noteId) || {}
-            const folder = findFolder(folders, note.folderId)
             return (
               <NotePageNav
                 {...routeProps}
-                folder={folder}
               />
             )
           }}
@@ -122,30 +116,26 @@ class App extends Component {
 
   render() {
     return (
-      <div className='App'>
-        <nav className='App__nav'>
-        <FoldersContext.Provider value={{
-          folders: this.state.folders
-        }}>
-          {this.renderNavRoutes()}
-        </FoldersContext.Provider>
-          
-        </nav>
-        <header className='App__header'>
-          <h1>
-            <Link to='/'>Noteful</Link>
-            {' '}
-            <FontAwesomeIcon icon='check-double' />
-          </h1>
-        </header>
-        <main className='App__main'>
-          <NotesContext.Provider value={{
-            notes: this.state.notes
-          }}>
+      <AppContext.Provider value={{
+        folders: this.state.folders,
+        notes: this.state.notes
+      }}>
+        <div className='App'>
+          <nav className='App__nav'>
+            {this.renderNavRoutes()}
+          </nav>
+          <header className='App__header'>
+            <h1>
+              <Link to='/'>Noteful</Link>
+              {' '}
+              <FontAwesomeIcon icon='check-double' />
+            </h1>
+          </header>
+          <main className='App__main'>
             {this.renderMainRoutes()}
-          </NotesContext.Provider>
-        </main>
-      </div>
+          </main>
+        </div>
+      </AppContext.Provider>
     )
   }
 }
