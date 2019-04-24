@@ -10,7 +10,6 @@ import AddNote from '../AddNote/AddNote';
 import { getNotesForFolder, findNote } from '../notes-helpers';
 import AppContext from '../AppContext';
 import './App.css'
-import { promised } from 'q';
 
 class App extends Component {
   state = {
@@ -19,33 +18,40 @@ class App extends Component {
     error: null,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const BASEURL = "http://localhost:9090";
-    // fake date loading from API call
-    const getFolders = fetch(BASEURL+'/folders')
-    const getNotes = fetch(BASEURL+'/notes')
+    const [folderRes, notesRes] = [await fetch(BASEURL+'/folders'), await fetch(BASEURL+'/notes')]
 
-    Promise.all([getFolders, getNotes])
-    .then(resArr =>{
-      resArr.forEach((res, index) => {
-        if (!res.ok) throw new Error("Something went horribly wrong :(");
-        return [res.json(), index]
-        .then(jsonData => {
-          if(jsonData[1]===0) {
-            this.setState({
-              folders: jsonData[0],
-              error: null
-            })
-          } else {
-            this.setState({
-              notes: jsonData[0],
-              error: null
-            })
-          }
-        })
-      })})
-    .catch(err => this.setState({error: err.message}))    
-}
+    try {
+      const folders = await folderRes.json()
+      const notes = await notesRes.json()
+      
+      this.setState({
+        folders,
+        notes,
+        error: null
+      })
+    } catch(err) {
+      this.setState({error: err.message})
+    }
+
+    // Promise.all([getFolders, getNotes])
+    //   .then(resArr => {
+    //     return Promise.all(resArr.map(res => {
+    //       if (!res.ok) throw new Error("Something went horribly wrong :(")
+    //       return res.json()
+    //     }))
+    //   })
+    //   .then(data => {
+    //     console.log(data);
+    //     this.setState({
+    //       folders: data[0],
+    //       notes: data[1],
+    //       error: null
+    //     })
+    //   })
+    //   .catch(err => this.setState({error: err.message}))
+  }
 
   renderNavRoutes() {
     return (
