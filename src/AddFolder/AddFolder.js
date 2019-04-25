@@ -61,7 +61,7 @@ export default class AddFolder extends Component {
       },
       body: JSON.stringify(newFolder)
     })
-      .then( () => console.log('POST Successful!'))
+      .then(() => this.props.history.push('/'))
       .catch(err => this.context.onError(err))
   }
 

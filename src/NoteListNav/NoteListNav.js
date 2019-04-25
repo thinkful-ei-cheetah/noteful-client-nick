@@ -6,7 +6,7 @@ import { countNotesForFolder } from '../notes-helpers'
 import './NoteListNav.css';
 import AppContext from '../AppContext';
 
-export default function NoteListNav(props) {
+export default function NoteListNav() {
   return (
     <AppContext.Consumer>
       {({folders, notes}) => (

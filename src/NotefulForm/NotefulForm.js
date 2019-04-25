@@ -8,7 +8,6 @@ export default function NotefulForm(props) {
       className={['Noteful-form', className].join(' ')}
       action='#'
       {...otherProps}
-      //onSubmit={(e) => props.handleAddFolder(e)}
     />
   )
 }

@@ -90,7 +90,7 @@ export default class AddNote extends Component {
       },
       body: JSON.stringify(newNote)
     })
-      .then( () => console.log('POST Successful!'))
+      .then(() => this.props.history.push('/'))
       .catch(err => this.context.onError(err))
   }
 
@@ -105,7 +105,8 @@ export default class AddNote extends Component {
     }  
     // grab input
     this.addNoteApi(newNote);
-    this.context.onAddNote(newNote)
+    this.context.onAddNote(newNote);
+    // this.props.history.push('/');
   }
 
   formValid() {
