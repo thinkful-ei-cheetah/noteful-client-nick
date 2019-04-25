@@ -63,6 +63,10 @@ class App extends Component {
     })
   }
 
+  onAddFolder = () => {}
+
+  onAddNote = () => {}
+
   renderNavRoutes() {
     return (
       <>
@@ -95,7 +99,9 @@ class App extends Component {
         folders: this.state.folders,
         notes: this.state.notes,
         onDeleteNote: this.onDeleteNote,
-        updateNoteState: this.updateNoteState
+        updateNoteState: this.updateNoteState,
+        onAddFolder: this.onAddFolder,
+        onAddNote: this.onAddNote
       }}>
         <div className='App'>
           <nav className='App__nav'>
