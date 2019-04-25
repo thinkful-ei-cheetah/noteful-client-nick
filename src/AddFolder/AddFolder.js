@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import ValidationError from '../validationError/validationError'
 import NotefulForm from '../NotefulForm/NotefulForm'
 import './AddFolder.css'
 import AppContext from '../AppContext'
@@ -12,13 +12,13 @@ export default class AddFolder extends Component {
     super(props);
     this.state = {
       folderName: '',
-      folderNameValid: true,
+      folderNameValid: false,
       validationMessage: ''
     }
   }
 
   updateFolderName = (folderName) => {
-    this.setState ({folderName}, () => { this.validateFolderName(folderName) });
+    this.setState ({folderName}, () => this.validateFolderName(folderName));
   }
 
   validateFolderName(folderName) {
@@ -37,7 +37,7 @@ export default class AddFolder extends Component {
         message = 'Folder name must be at least 3 characters long';
         hasError = true;
       } else {
-        if (!folderName.match(new RegExp(/^ [a - zA - Z0 -9_ -] * $/))) {
+        if (!folderName.match(new RegExp(/^([a-zA-Z0-9_-])*$/))) {
           message = 'Folder name must use alphanumeric characters only'
           hasError = true;
         } else {
@@ -46,12 +46,10 @@ export default class AddFolder extends Component {
         }
       }
     }
-
     this.setState({
       folderNameValid: !hasError,
       validationMessage: message
     })
-
   }
 
   addFolderApi = (newFolder) => {
@@ -64,32 +62,32 @@ export default class AddFolder extends Component {
       body: JSON.stringify(newFolder)
     })
       .then( () => console.log('POST Successful!'))
+      .catch(err => this.context.onError(err))
   }
 
-  handleAddFolder = (e, newFolder) => {
+  handleAddFolder = (e) => {
     e.preventDefault();
-
+    const newFolder = {
+      id: this.context.genRandomId,
+      name: this.state.folderName
+    }  
     // grab input
-
     this.addFolderApi(newFolder);
+    this.context.onAddFolder(newFolder)
   }
 
   render() {
-    const newFolder = {
-      id: "q2l3kj412;3lk4j",
-      name: "Test123"
-    }
-
     return (
       <section className='AddFolder'>
         <h2>Create a folder</h2>
-        <NotefulForm>
+        <NotefulForm onSubmit={e => this.handleAddFolder(e)}>
           <div className='field'>
             <label htmlFor='folder-name-input'>
               Name
             </label>
             <input type='text' id='folder-name-input' onChange={ e => this.updateFolderName(e.target.value)}/>
           </div>
+          <ValidationError hasError={!this.state.folderNameValid} message={this.state.validationMessage}/>
           <div className='buttons'>
             <button type='submit' disabled={!this.state.folderNameValid}>
               Add folder
@@ -100,3 +98,5 @@ export default class AddFolder extends Component {
     )
   }
 }
+
+//onSubmit={e => this.handleAddFolder(e)}

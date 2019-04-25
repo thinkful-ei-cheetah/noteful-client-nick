@@ -52,6 +52,10 @@ class App extends Component {
     //   .catch(err => this.setState({error: err.message}))
   }
 
+  onError = (error) => {
+    this.setState({error})
+  }
+
   onDeleteNote = (noteId) => {
     const BASEURL = "http://localhost:9090";
     return fetch(BASEURL+`/notes/${noteId}`, {method: "DELETE"})
@@ -63,9 +67,19 @@ class App extends Component {
     })
   }
 
-  onAddFolder = () => {}
+  genRandomId = () => {
+    return Math.random().toString(36).substr(2,9)
+  }
 
-  onAddNote = () => {}
+  onAddFolder = (newFolder) => {
+    this.setState({
+      folders: [...this.state.folders, newFolder]
+    })
+  }
+
+  onAddNote = (newNote) => {
+    this.setState({notes: [...this.state.notes, newNote]})
+  }
 
   renderNavRoutes() {
     return (
@@ -101,7 +115,9 @@ class App extends Component {
         onDeleteNote: this.onDeleteNote,
         updateNoteState: this.updateNoteState,
         onAddFolder: this.onAddFolder,
-        onAddNote: this.onAddNote
+        onAddNote: this.onAddNote,
+        genRandomId: this.genRandomId,
+        onError: this.onError
       }}>
         <div className='App'>
           <nav className='App__nav'>
