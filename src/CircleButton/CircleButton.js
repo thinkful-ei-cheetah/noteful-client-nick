@@ -21,6 +21,6 @@ NavCircleButton.propTypes = {
   className: PropTypes.string
 }
 
-NavCircleButton.defaultProps ={
-  tag: 'a',
+NavCircleButton.defaultProps = {
+  tag: 'a'
 }

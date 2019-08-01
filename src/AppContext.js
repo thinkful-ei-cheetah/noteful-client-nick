@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 
 const AppContext = React.createContext({
   folders: [],
   notes: [],
   onDeleteNote: () => {},
-  updateNoteState: () => {},
-});
+  updateNoteState: () => {}
+})
 
-export default AppContext;
+export default AppContext
